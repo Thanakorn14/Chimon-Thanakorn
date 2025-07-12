@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>แนะนำตัว ชิม่อน ธนากร วรรณวงค์</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Sarabun&display=swap');
+
+  body {
+    font-family: 'Sarabun', sans-serif;
+    background-color: #e0f7fa;
+    color: #333;
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 15px #80deea;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+
+  .typing {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 2rem;
+    color: #00796b;
+    border-right: 3px solid #00796b;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 22ch; /* ปรับตามความยาวข้อความ */
+    animation: typing 3.5s steps(22), blink 0.75s step-end infinite;
+    margin: 0 auto;
+  }
+
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 22ch }
+  }
+
+  @keyframes blink {
+    50% { border-color: transparent }
+  }
+
+  section {
+    background-color: #ffffffdd;
+    border-radius: 8px;
+    padding: 15px 25px;
+    margin-top: 30px;
+    box-shadow: 0 0 10px #80deea;
+  }
+
+  h2 {
+    color: #00796b;
+    border-bottom: 2px solid #00796b;
+    padding-bottom: 6px;
+  }
+
+  a {
+    color: #00796b;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* กำหนดขนาดของ canvas 3D */
+  #kirua3d {
+    display: block;
+    margin: 30px auto;
+    width: 300px;
+    height: 300px;
+    border-radius: 12px;
+    box-shadow: 0 0 12px #004d40;
+    background-color: #ffffffdd;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="typing">ชิม่อน ธนากร วรรณวงค์</div>
+</header>
+
+<section>
+  <p><strong>ชื่อ:</strong> ชิม่อน ธนากร วรรณวงค์</p>
+  <p><strong>วันเกิด:</strong> ธันวาคม 2009</p>
+  <p><strong>สถานที่ทำงาน:</strong> CFP24 แผนก Wechiren</p>
+  <p><strong>เจ้าของร้าน:</strong> Store PPEACH Shop</p>
+</section>
+
+<section>
+  <h2>ช่องทางติดตาม</h2>
+  <p>Instagram: <a href="https://www.instagram.com/_Khunpeach" target="_blank">_Khunpeach</a></p>
+  <p>Facebook: <a href="https://www.facebook.com/ChimonThanakorn" target="_blank">Chimon Thanakorn</a></p>
+</section>
+
+<!-- ที่แสดงโมเดล 3D -->
+<canvas id="kirua3d"></canvas>
+
+<!-- โหลดไลบรารี Three.js -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.148.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.148.0/examples/js/loaders/GLTFLoader.js"></script>
+
+<script>
+  // สร้าง scene, camera และ renderer
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000); // aspect 1 เพราะ canvas เป็น 300x300
+  const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('kirua3d'), alpha: true, antialias: true });
+  renderer.setSize(300, 300);
+
+  // ตั้งกล้อง
+  camera.position.z = 3;
+
+  // เพิ่มแสง
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(5, 5, 5);
+  scene.add(light);
+  scene.add(new THREE.AmbientLight(0x404040)); // แสงนุ่มนวล
+
+  // โหลดโมเดล Kirua GLTF
+  const loader = new THREE.GLTFLoader();
+  // ตัวอย่างโมเดล Kirua ฟรีบน Sketchfab ที่ผมหามา (ถ้าคุณมีไฟล์เอง เปลี่ยน URL ตรงนี้)
+  const modelURL = 'https://cdn.jsdelivr.net/gh/thanakorn14/kirua-model/kirua.gltf';
+
+  let kiruaModel;
+
+  loader.load(modelURL,
+    function(gltf) {
+      kiruaModel = gltf.scene;
+      kiruaModel.scale.set(1.5,1.5,1.5); // ขยายโมเดล
+      scene.add(kiruaModel);
+      animate();
+    },
+    undefined,
+    function(error) {
+      console.error('โหลดโมเดลล้มเหลว:', error);
+    }
+  );
+
+  function animate() {
+    requestAnimationFrame(animate);
+    if(kiruaModel) {
+      kiruaModel.rotation.y += 0.01; // หมุนโมเดล
+    }
+    renderer.render(scene, camera);
+  }
+</script>
+
+</body>
+</html>
